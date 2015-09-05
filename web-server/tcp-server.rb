@@ -2,19 +2,26 @@ require 'socket'
 
 def parse_request(req)
   h = {}
-  lines = req.split("\n")
-  head = lines[0].split(" ")
+  puts req
+  parts = req.split("\n\n")
+  top = parts[0].split("\n")
+  puts "Parts: #{parts.inspect}"
+  puts "Top: #{top.inspect}"
+
+  head = top[0].split(" ")
   h[:method] = head[0]
   h[:path] = head[1]
   h[:version] = head[2]
 
+  h[:info] = top[1..-1]
+  h[:body] = parts[1]
+
   h
 end
 
-def response(request)
+def get_response(request)
   h = {version: request[:version]}
-  path = request[:path][1..-1]
-  puts path
+  path = request[:path].sub(/^\//, '')
 
   if File.exist?(path)
     h[:status] = 200
@@ -34,6 +41,11 @@ def response(request)
   format_response(h)
 end
 
+def post_response(request)
+  h = {version: request[:version]}
+  path = request[:path].sub(/^\//, '')
+end
+
 def format_response(h)
   s = "#{h[:version]} #{h[:status]} #{h[:status_message]}\n"
   if h[:status] == 200
@@ -51,13 +63,19 @@ server = TCPServer.open(2000)
 loop do
   client = server.accept        # Wait for a client to connect
   request = parse_request(client.gets)
-                                # Get request from client and send it to parse
+  puts "Received request from client: #{request.inspect}"
+
+  resp = ''
+  
   case request[:method]
   when "GET"
-    resp = response(request)
-    client.puts resp
+    resp = get_response(request)
+  when "POST"
+    resp = post_response(request)
   else
   end
+
+  client.puts resp
   client.puts "Closing the connection. Bye!"
   client.close                  # Disconnect from the client
 end
