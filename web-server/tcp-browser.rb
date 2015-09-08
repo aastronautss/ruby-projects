@@ -10,34 +10,40 @@ def post_request(path, content)
   "POST #{path} HTTP/1.0\nContent-Length: #{length}\n\n#{content}"
 end
 
+# Sends a request (complete with headers and body) to server and returns the server's response (complete with headers and body) as a string.
 def talk_to_server(host, port, request)
   socket = TCPSocket.open(host, port)
   socket.print(request)
   response = socket.read
+  socket.close
+
   response
 end
 
 def run(path = '/index.html', host = 'localhost', port = 2000)
   loop do
+    output = ""
     puts "What type of request would you like to make?"
     input = gets.chomp.upcase
+
     case input
     when "GET"
       request = get_request(path)
       output = talk_to_server(host, port, request)
-      puts output
     when "POST"
       puts "What is your name?"
       name = gets.chomp
       puts "What is your email?"
       email = gets.chomp
-      viking_hash = {viking: {name: name, email: email}}
-      request = post_request('/thanks.html', viking_hash.to_json)
-      output = talk_to_server(host, port, request)
+      viking_hash = {viking: {name: name, email: email}} # Store info in hash
+      request = post_request('/thanks.html', viking_hash.to_json) # Create a post request string
+      output = talk_to_server(host, port, request) # Create output based on server response
     when "QUIT" then break
     else
-      puts "Invalid Input"
+      output = "Invalid input."
     end
+
+    puts output
   end
 end
 
