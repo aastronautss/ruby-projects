@@ -1,4 +1,6 @@
 require 'socket'
+require 'erb'
+require 'json'
 
 # A basic viking-themed server that runs in the command line, taking basic 
 # GET and POST requests.
@@ -14,7 +16,6 @@ class VikingServer
     loop do
       client = server.accept        # Wait for a client to connect
       request = parse_request(client)
-      puts "REQUEST: #{request.inspect}"
 
       resp = ''
       
@@ -51,7 +52,6 @@ class VikingServer
 
     # Add body to response if there is one.
     content_length = r["Content-Length"].to_i
-    puts "CONTENT LENGTH: #{content_length}"
     r[:body] = read_body(client, content_length) unless content_length.nil? || content_length == 0
 
     r
@@ -84,6 +84,7 @@ class VikingServer
     hash
   end
 
+  # Pulls a set number of characters from client.
   def read_body(client, length)
     s = ""
     length.times do 
@@ -101,13 +102,13 @@ class VikingServer
     if File.exist?(path)
       h[:status] = 200
       h[:status_message] = "OK"
+
       file = File.open(path, "r")
       body = file.read
       file.close
-      h[:date] = File.mtime(path)
-      h[:length] = body.length
+      h["Date"] = File.mtime(path)
+      h["Content-Length"] = body.length
       h[:body] = body
-
     else
       h[:status] = 404
       h[:status_message] = "Not Found"
@@ -121,13 +122,33 @@ class VikingServer
   def post_response(request)
     h = {version: request[:version]}
     path = request[:path].sub(/^\//, '')
+
+    if File.exist?(path)
+      h[:status] = 200
+      h[:status_message] = "OK"
+
+      params = JSON.parse(request[:body])
+      user = "<li>name: #{params['viking']['name']}</li><li>email: #{params['viking']['email']}</li>"
+
+      template = File.read(path)
+      h[:body] = template.gsub('<%= yield %>', user)
+      h["Date"] = Time.now
+      h["Content-Length"] = h[:body].length
+    else
+      h[:status] = 404
+      h[:status_message] = "Not Found"
+    end
+
+    format_response(h)
   end
 
+  # Takes a hash with all the parts of the http response and returns a 
+  # formatted string.
   def format_response(h)
     s = "#{h[:version]} #{h[:status]} #{h[:status_message]}\n"
     if h[:status] == 200
-      s << "Date: #{h[:date]}\n"
-      s << "Content-Length: #{h[:length]}\n\n"
+      s << "Date: #{h["Date"]}\n"
+      s << "Content-Length: #{h["Content-Length"]}\n\n"
       s << h[:body]
     end
 
