@@ -2,7 +2,7 @@
 Projects from the "Ruby on the Web" module onward for the Ruby Programming course on the Odin Project
 
 ## Project 1: Twitter Spambot
-###Spec
+### Spec
 Create a command-line twitter client using JumpStartLabs' Twitter library to authorize with Twitter's API and send tweets and direct messages. Add functionality to spam all friends with a direct message and read each friend's latest tweet.
 
 ### More Information
@@ -22,3 +22,17 @@ The browser should:
 ### More Information
 http://www.theodinproject.com/ruby-programming/ruby-on-the-web
 http://www.tutorialspoint.com/ruby/ruby_socket_programming.htm
+
+## Project 3: Fibonacci Functions
+### Spec
+Create two functions that take an integer and return an array with that many fibonacci numbers. One should be implemented using an interator and the other should be a recursive function.
+
+### More Information
+http://www.theodinproject.com/ruby-programming/recursion?ref=lnav
+
+## Project 4: Merge Sort
+### Spec
+Create a function that takes an array and sorts its elements using merge sort.
+
+### More Information
+http://www.theodinproject.com/ruby-programming/recursion?ref=lnav
