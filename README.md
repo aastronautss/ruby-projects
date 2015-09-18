@@ -46,3 +46,10 @@ Construct the classes and methods necessary to make a binary search tree. Add se
 
 ### More Information
 http://www.theodinproject.com/ruby-programming/data-structures-and-algorithms
+
+## Project 6: Knight's Travails
+### Spec
+Create a method that takes a starting and finishing position for a knight on a chess board. Use tree traversal methods to return an array that contains the shortest path (in knight moves) from the start to the finish. For instance, if the method is passed [2, 3] and [8, 8], it should return [[2, 3], [4, 4], [6, 5], [8, 8]].
+
+## More Information
+http://www.theodinproject.com/ruby-programming/data-structures-and-algorithms
