@@ -36,3 +36,13 @@ Create a function that takes an array and sorts its elements using merge sort.
 
 ### More Information
 http://www.theodinproject.com/ruby-programming/recursion?ref=lnav
+
+## Project 5: Binary Search Tree
+### Spec
+Construct the classes and methods necessary to make a binary search tree. Add search functionality using the following methodologies:
+* Iterative breadth-first search
+* Iterative depth-first search
+* Recursive depth-first search.
+
+### More Information
+http://www.theodinproject.com/ruby-programming/data-structures-and-algorithms
