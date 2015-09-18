@@ -7,6 +7,8 @@ class Board
   end
 end
 
+PathTracker = Struct.new(:position, :path)
+
 # Has attributes from
 class Knight
   attr_accessor :position
@@ -37,24 +39,37 @@ class Knight
     moves << [position[0] - 1, position[1] - 2]
   end
 
-  # Returns an array of arrays listing all possible paths from the start to finish. The path and list attributes are passed in order to make recursion easier.
-  def self.all_paths(start, finish, path = [start], list = [])
-    if start == finish # base case
-      path << finish
-      path = path[0] if path[0] == path[1]
-      list << path unless list.include? path
-      return list
+  # Returns an array of arrays listing all possible paths from the start to finish.
+  def self.shortest_path(start, finish)
+    if !(valid_position?(start) && valid_position?(finish))
+      return nil
     end
 
-    moves = valid_moves_from(start)
-    moves.each do |move|
-      return all_paths(move, finish, path, list)
+    queue = [PathTracker.new(start, [start])]
+    visited = [start]
+
+    until queue.empty?
+      position = queue.pop
+      moves = valid_moves_from(position.position).select { |move| !visited.include?(move) }
+
+      if moves.include?(finish)
+        position.path << finish
+        return position.path
+      end
+
+      moves.each do |move|
+        queue.unshift PathTracker.new(move, position.path + [move])
+        visited << move
+      end
     end
   end
 
-
+  def self.valid_position?(position = @position)
+    return position.all? { |i| i.between?(1, 8) }
+  end
 end
 
 board = Board.new
 board.grid.each { |row| p row }
-p Knight.all_paths([3, 4], [1, 5])
+path = Knight.shortest_path([3, 4], [8, 8])
+path.each { |move| p move }
