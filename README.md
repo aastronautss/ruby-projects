@@ -53,3 +53,21 @@ Create a method that takes a starting and finishing position for a knight on a c
 
 ## More Information
 http://www.theodinproject.com/ruby-programming/data-structures-and-algorithms
+
+## Project 7: Time Traveling
+### Spec
+Create RSpec tests for various projects from days' past, making sure they all pass. Use the following projects to do this:
+* "Caeser Cipher" from "Ruby Building Blocks"
+* Six methods from "Enumerable Methods" in the "Advanced Building Blocks" assignment
+* Victory conditions from the "Tic-Tac-Toe" project.
+
+### More Information
+http://www.theodinproject.com/ruby-programming/testing-ruby?ref=lnav
+
+## Project 8: Connect Four
+### Spec
+Create a connect four game to be played in the command line. Use your newfound RSpec abilities to create tests for each object and method. That is, use TDD principles to build it, writing a failing test and coding to make the test pass, and then refactoring to improve it.
+
+### More Information
+http://www.theodinproject.com/ruby-programming/testing-ruby?ref=lc-pb
+https://en.wikipedia.org/wiki/Connect_Four
